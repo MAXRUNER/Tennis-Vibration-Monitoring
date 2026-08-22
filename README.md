@@ -1,14 +1,14 @@
 # Tennis Vibration Monitoring
 This repository contains the firmware used for the experiments described in the accompanying paper Longitudinal Analysis of Tennis String-bed Degradation Through Embedded Vibration Monitoring.
 
-C++ Codebase for the Seeed Studio XIAO nRF52840 Sense implementing an onboard FFT-based vibration analysis and impact classification for a longitudinal study of tennis string-bed degradation as decribed in the accompanying paper
+Arduino C++ Firmware for the Seeed Studio XIAO nRF52840 Sense implementing an onboard FFT-based vibration analysis and impact classification for a longitudinal study of tennis string-bed degradation as described in the accompanying paper
 
 ## Longitudinal Analysis of Tennis String-bed Degradation Through Embedded Vibration Monitoring
-Using a Seeed Studio XIAO nRF52840 Sense and a TE Connectivity LDT0-028K Piezoelectric sensor as the primary components, the system samples the piezoelectric sensor signal, performs an onboard Fast Fourier Transform (FFT), extracts the dominant post-impact frequency, and logs the result for later analysis. 
+Using a Seeed Studio XIAO nRF52840 Sense and a TE Connectivity LDT0-028K piezoelectric sensor as the primary components, the system samples the piezoelectric sensor signal, performs an onboard Fast Fourier Transform (FFT), extracts the dominant post-impact frequency, and logs the result for later analysis. 
 
-A Hann Window is applied to reduce the spectral leakage caused by discontinuities at the boundaries of the sampled signal. During field testing, the system operates without requiring the Serial Monitor; serial output was used only during debugging and pre-field testing.
+A Hann window is applied to reduce the spectral leakage caused by discontinuities at the boundaries of the sampled signal. During field testing, the system operates without requiring the Serial Monitor; serial output was used only during debugging and pre-field testing.
 
-The system also uses a mishit identification algorithm. Originally, there were no shank classification methods, but after conducting a few tests by taking an old set of strings and conducting the trials on the racket, the algorithm was set. However, there is still the risk of wrongly identifying mishits because the algorithm could potentially make errors in the classification, 
+The system also uses a mishit identification algorithm. The classification thresholds were determined empirically through preliminary testing using an older string bed before the main longitudinal experiment. However, there is still the risk of wrongly identifying mishits because the algorithm could make errors in the classification.
 
 
 ### Features
@@ -20,7 +20,6 @@ The system also uses a mishit identification algorithm. Originally, there were n
 - Mishit identification and classification
 - Flash-based CSV logging
 - Automatic session tracking
-- OLED status display (Can be disabled or removed by removing `#define USE_OLED`)
 - Persistent state recovery after power loss
 
 ### Hardware
@@ -30,22 +29,23 @@ The system also uses a mishit identification algorithm. Originally, there were n
 - 10 kΩ Resistor
 - 3.3V Zener Diode
 - 3.7V LiPo Battery
-- SSD1306 OLED (optional, used during code development and pre-field testing)
-- XIAO Expansion Board (Provided a 128x64 OLED, a JST-PH battery port, a buzzer and a button)
+- XIAO Expansion Board (optional; provides a 128×64 OLED, JST-PH battery connector, buzzer, and push button)
 
 ### Software Libraries
 - Adafruit_TinyUSB.h
 - Adafruit_LittleFS.h  
 - InternalFileSystem.h  
-- arduinoFFT.h  
+- arduinoFFT.h
+- math.h
 
 > #include <Adafruit_TinyUSB.h>  
 > #include <Adafruit_LittleFS.h>  
 > #include <InternalFileSystem.h>  
-> #include <arduinoFFT.h>  
+> #include <arduinoFFT.h>
+> #include <math.h>
 
 ### Processing Pipeline
-Ball impact -> Piezoelectric Sensor -> ADC Sampling -> 1024 Samples at 10 kHz -> Hann Window -> FFT -> Major Peak Detection -> Mishit Classification -> CSV Logging
+Ball impact -> Piezoelectric Sensor -> ADC Sampling -> 1024 Samples at 10 kHz -> Hann window -> FFT -> Dominant Frequency Extraction -> Mishit Classification -> CSV Logging
 
 ### CSV Schema Documentation
 
@@ -54,8 +54,8 @@ Ball impact -> Piezoelectric Sensor -> ADC Sampling -> 1024 Samples at 10 kHz ->
 
 | Column Name | Data Type | Description |
 | :--- | :--- | :--- |
-| `session` | Integer | Session number (1 to 7). Increases after 150 valid shots are hit. |
-| `count` | Integer | Ball impact count for the session. Features a 10-hour cooldown after 150 valid shots. |
+| `session` | Integer | Session number (1 to 7). Advances after 150 valid impacts have been recorded for the current session. |
+| `count` | Integer | Ball impact count for the session. Includes all detected impacts, including those classified as potential mishits. |
 | `frequency_hz` | Float | Dominant post-impact frequency in Hertz. |
 | `mishit_flag` | Binary | `0` = Valid impact, `1` = Mishit. |
 | `uptime_ms` | Integer | Time elapsed in milliseconds since the microcontroller booted. |
@@ -68,7 +68,7 @@ session,count,frequency_hz,mishit_flag,uptime_ms
 </details>
 
 ### Session Workflow
-Power On -> Session 1 -> 150 valid impacts -> 10 hour cooldown -> Session 2 -> ... -> Session 7 -> Experiment Complete
+Power On -> Session 1 -> 150 valid impacts -> Cooldown Period -> Session 2 -> ... -> Session 7 -> Experiment Complete
 
 ### Mishit Detection
 
@@ -82,10 +82,11 @@ $|Δf_{\text{next}} - Δf_{\text{prev}}| > 20 \text{ Hz}$
 1. Install the Seeed XIAO nRF52840 board package
 2. Install the required Arduino Libraries
 3. Download this repo and open it
-4. Compile and Upload the code to the module
+4. Compile and upload the firmware to the module
 
-Note: Though I designed the codebase myself, some parts of this repository are edited by AI. AI was mainly used to help resolve compilation issues, configure the library environment, and draft much of the optional OLED display text. This allowed me to save time by using it for the remaining parts of the code, rather than on a feature that was meant to be optional in the first place. However, the signal acquisition, FFT pipeline, the mishit logic and others were all designed without AI.
+Note: Though I designed and wrote the firmware myself, some parts were edited with AI. The first use case was variable naming. I originally named variables things like i, x, y, z, a, b, and other random names that made sense at the time but eventually became impossible to keep track of. There were points where I couldn't even remember what some variables were for, so I used AI to generate a mapping and rename them into something a little more readable without changing the logic. The second use case was handling less common failure scenarios. Apart from obvious cases, such as the CSV file failing to open, I used AI to brainstorm additional edge cases and then implemented the appropriate error handling in the code. The biggest use case, however, was realizing that I wasn't actually writing C. I started this project intending to write everything in C, completely forgetting that the Arduino framework uses C++. I only realized this after asking AI, which also helped me understand that some of the more complex parts of the project could be implemented much more cleanly using lightweight C++ features.
 
+And yes... I also used AI to name my git commits.
 
 Questions, bug reports, and suggestions are welcome.  
 Email: **rithwikmahanti258@gmail.com**
