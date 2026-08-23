@@ -13,7 +13,7 @@ const uint32_t SAMPLE_RATE = 10000;
 const uint16_t SESSION_SIZE = 150;
 const uint8_t MAX_SESSIONS = 7;
 const uint32_t COOLDOWN = 10UL * 60 * 60 * 1000;
-const int TRIGGER = 8;
+const int TRIGGER = 4;
 
 double realData[N], imagData[N];
 ArduinoFFT<double> FFT(realData, imagData, N, SAMPLE_RATE);
