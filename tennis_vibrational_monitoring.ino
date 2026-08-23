@@ -3,6 +3,7 @@
 #include <InternalFileSystem.h>
 #include <arduinoFFT.h>
 #include <math.h>
+#include <string.h>
 
 using namespace Adafruit_LittleFS_Namespace;
 
@@ -30,7 +31,7 @@ const uint32_t MAGIC = 0x54454E4E;
 const char *CSV = "/data.csv";
 const char *STATE = "/state.bin";
 bool storageOK = false;
-armed = true;
+bool armed = true;
 double baseline = 0;
 uint32_t lastHit = 0, quietSince = 0, cooldownStarted = 0;
 
@@ -145,7 +146,10 @@ void startCooldown() {
 
 void nextSession() {
   state.session++;
-  state.valid = state.count = state.stage = state.cooling = 0;
+  state.valid = 0;
+  state.count = 0;
+  state.stage = 0;
+  state.cooling = 0;
   saveState();
 }
 
@@ -198,6 +202,12 @@ void processHit(double frequency, uint32_t time) {
 
   if (!logHit(state.pending, mishit, state.pendingTime)) {
     state.count--;
+    state.stage = 0;
+    state.previous = 0;
+    state.pending = 0;
+    state.pendingTime = 0;
+
+    saveState();
     return;
   }
 
@@ -222,9 +232,12 @@ void processHit(double frequency, uint32_t time) {
 
     if (!logHit(frequency, false, time)) {
       state.count--;
-      state.pending = frequency;
-      state.pendingTime = time;
-      state.stage = 2;
+
+      state.stage = 0;
+      state.previous = 0;
+      state.pending = 0;
+      state.pendingTime = 0;
+
       saveState();
       return;
     }
