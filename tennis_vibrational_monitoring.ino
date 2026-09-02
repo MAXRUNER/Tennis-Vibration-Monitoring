@@ -27,7 +27,7 @@ struct State {
   uint32_t pendingTime;
 } state;
 
-const uint32_t MAGIC = 0x54454E4E;
+const uint32_t MAGIC = 0xCAFEBABE; // Unfortunately had to stay professional
 const char *CSV = "/data.csv";
 const char *STATE = "/state.bin";
 bool storageOK = false;
