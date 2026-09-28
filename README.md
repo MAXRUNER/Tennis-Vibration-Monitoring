@@ -1,10 +1,10 @@
 # Tennis Vibration Monitoring
 This repository contains the firmware used for the experiments described in the accompanying paper Longitudinal Analysis of Tennis String-bed Degradation Through Embedded Vibration Monitoring.
 
-Arduino C++ Firmware for the Seeed Studio XIAO nRF52840 Sense implementing an onboard FFT-based vibration analysis and impact classification for a longitudinal study of tennis string-bed degradation as described in the accompanying paper
+Arduino C++ Firmware for the Seeed Studio XIAO nRF52840 implementing an onboard FFT-based vibration analysis and impact classification for a longitudinal study of tennis string-bed degradation as described in the accompanying paper
 
 ## Longitudinal Analysis of Tennis String-bed Degradation Through Embedded Vibration Monitoring
-Using a Seeed Studio XIAO nRF52840 Sense and a TE Connectivity LDT0-028K piezoelectric sensor as the primary components, the system samples the piezoelectric sensor signal, performs an onboard Fast Fourier Transform (FFT), extracts the dominant post-impact frequency, and logs the result for later analysis. 
+Using a Seeed Studio XIAO nRF52840 and a TE Connectivity LDT0-028K piezoelectric sensor as the primary components, the system samples the piezoelectric sensor signal, performs an onboard Fast Fourier Transform (FFT), extracts the dominant post-impact frequency, and logs the result for later analysis. 
 
 A Hann window is applied to reduce the spectral leakage caused by discontinuities at the boundaries of the sampled signal. During field testing, the system operates without requiring the Serial Monitor; serial output was used only during debugging and pre-field testing.
 
@@ -23,13 +23,20 @@ The system also uses a mishit identification algorithm. The classification thres
 - Persistent state recovery after power loss
 
 ### Hardware
-- Seeed Studio XIAO nRF52840 Sense
-- TE Connectivity LDT0-028K Piezoelectric sensor
-- 1 MΩ Resistor
-- 10 kΩ Resistor
-- 3.3V Zener Diode
-- 3.7V LiPo Battery
-- XIAO Expansion Board (optional; provides a 128×64 OLED, JST-PH battery connector, buzzer, and push button)
+- Seeed Studio XIAO nRF52840
+- TE Connectivity LDT0-028K Piezoelectric Sensor
+- 1× 10 kΩ resistor
+- 2× 1 MΩ resistors
+- 2× small-signal Schottky diodes for ADC input protection
+- 1× Schottky diode for LiPo power isolation
+- 3.7 V LiPo battery
+- JST-PH 2-pin battery connector (2.0 mm pitch)
+- 2× 1×7 2.54 mm female pin sockets for the removable XIAO nRF52840
+- 2-pin connector for the piezoelectric sensor
+- Custom PCB
+
+<img width="818" height="729" alt="image" src="https://github.com/user-attachments/assets/31f9d240-71a5-4734-9768-91ece73de123" />
+
 
 ### Software Libraries
 - Adafruit_TinyUSB.h
