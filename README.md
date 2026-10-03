@@ -47,6 +47,14 @@ The system also uses a mishit identification algorithm. The classification thres
 | R1 | 10 kΩ 0805, 0805W8F1002T5E | `C17414` |
 | R3, R4 | 1 MΩ 0805, 0805W8F1004T5E | `C17514` |
 
+### Ordered PCB Details
+- 2-layer FR-4
+- 0.8 mm thickness
+- 1 oz copper
+- Lead-free HASL
+- Partial top-side assembly
+- JLCPCB assembles D2, D3, D4, R1, R3 and R4
+- J1, J2, J4 and J6 installed manually
 
 ### Software Libraries
 - Adafruit_TinyUSB.h
@@ -88,17 +96,29 @@ session,count,frequency_hz,mishit_flag,uptime_ms
 Power On -> Session 1 -> 150 valid impacts -> Cooldown Period -> Session 2 -> ... -> Session 7 -> Experiment Complete
 
 ### Mishit Detection
-
 $Δf_{\text{prev}} = | f_n - f_{n-1} |$  
 $Δf_{\text{next}} = | f_n - f_{n+1} |$  
 An impact was classified as a potential mishit if it satisfied both of the following conditions:  
 $Δf_{\text{prev}} > 50 \text{ Hz}$  
 $|Δf_{\text{next}} - Δf_{\text{prev}}| > 20 \text{ Hz}$
 
+However, one limitation of this metric occurs when two consecutive impacts are both mishits. Therefore:
+
+#### Case 1 (Isolated Mishit):
+\[\Delta f_{\text{prev}}>50\text{ Hz}\quad\]
+\[\quad \left|{}\Delta f_{\text{next}}-\Delta f_{\text{prev}}\right|{}>20\text{ Hz}\]
+
+#### Case 2 (Consecutive Mishit Fix):
+\[\Delta f_{\text{prev}}\le 50\text{ Hz}\quad \]
+Let \(\Delta f_{\text{extended}}=\left|{}f_{n}-f_{n-2}\right|{}\),
+\[\quad \Delta f_{\text{extended}}>50\text{ Hz}\quad \text{and}\quad M(n-1)=1\]
+
+\(M(n-1)\) is the mishit flag assigned to the preceding impact.
+
 ### Build
 1. Install the Seeed XIAO nRF52840 board package
 2. Install the required Arduino Libraries
-3. Download this repo and open it
+3. Download this repo and open it (tennis_vibrational_monitoring.ino)
 4. Compile and upload the firmware to the module
 
 Note: Though I designed and wrote the firmware myself, some parts were edited with AI. The first use case was variable naming. I originally named variables things like i, x, y, z, a, b, and other random names that made sense at the time but eventually became impossible to keep track of. There were points where I couldn't even remember what some variables were for, so I used AI to generate a mapping and rename them into something a little more readable without changing the logic. The second use case was handling less common failure scenarios. Apart from obvious cases, such as the CSV file failing to open, I used AI to brainstorm additional edge cases and then implemented the appropriate error handling in the code. The biggest use case, however, was that it helped me understand that some of the more complex parts of the project could be implemented much more cleanly using lightweight C++ features.
