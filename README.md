@@ -37,6 +37,16 @@ The system also uses a mishit identification algorithm. The classification thres
 
 <img width="818" height="729" alt="image" src="https://github.com/user-attachments/assets/31f9d240-71a5-4734-9768-91ece73de123" />
 
+| Designator | Component | JLCPCB part # |
+|---|---|---:|
+| D2 | B140-13-F, SMA Schottky | `C15759` |
+| D3, D4 | CDBF54-HF, SOD-323F Schottky | `C5612509` |
+| J1, J2 | PM254V-11-07-H85, 1×7 female socket | `C2832270` |
+| J4 | TSW-102-07-G-S, 1×2 male header | `C7402729` |
+| J6 | B2B-PH-K-S(LF)(SN), JST-PH | `C131337` |
+| R1 | 10 kΩ 0805, 0805W8F1002T5E | `C17414` |
+| R3, R4 | 1 MΩ 0805, 0805W8F1004T5E | `C17514` |
+
 
 ### Software Libraries
 - Adafruit_TinyUSB.h
