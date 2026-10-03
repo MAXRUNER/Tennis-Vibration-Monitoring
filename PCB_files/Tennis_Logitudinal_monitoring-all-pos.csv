@@ -1,0 +1,11 @@
+Designator,Val,Package,Mid X,Mid Y,Rotation,Layer
+"D2","Schottky-Diode","D_SMA",52.620000,-57.150000,0.000000,top
+"D3","Schottky-Diode","D_SOD-323F",50.800000,-44.450000,180.000000,top
+"D4","Schottky-Diode","D_SOD-323F",50.800000,-38.100000,0.000000,top
+"J1","XIAO left","PinSocket_1x07_P2.54mm_Vertical",45.000000,-52.620,90.000000,top
+"J2","XIAO right","PinSocket_1x07_P2.54mm_Vertical",60.240000,-52.620,90.000000,top
+"J4","Piezo sensor","PinHeader_1x02_P2.54mm_Vertical",49.530,-31.750,0.000000,top
+"J6","JST-PH connector (3.7V Li-Po)","JST_PH_B2B-PH-K_1x02_P2.00mm_Vertical",51.620,-82.550,180.000000,top
+"R1","10K ohm resistor","R_0805_2012Metric",44.450000,-37.187500,90.000000,top
+"R3","1M","R_0805_2012Metric",57.150000,-50.800000,-90.000000,top
+"R4","1M","R_0805_2012Metric",57.150000,-38.100000,0.000000,top

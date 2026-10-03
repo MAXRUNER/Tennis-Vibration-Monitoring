@@ -1,0 +1,23 @@
+%TF.GenerationSoftware,KiCad,Pcbnew,10.0.3*%
+%TF.CreationDate,2026-10-02T23:49:07+05:30*%
+%TF.ProjectId,Tennis_Logitudinal_monitoring,54656e6e-6973-45f4-9c6f-676974756469,rev?*%
+%TF.SameCoordinates,Original*%
+%TF.FileFunction,Profile,NP*%
+%FSLAX46Y46*%
+G04 Gerber Fmt 4.6, Leading zero omitted, Abs format (unit mm)*
+G04 Created by KiCad (PCBNEW 10.0.3) date 2026-10-02 23:49:07*
+%MOMM*%
+%LPD*%
+G01*
+G04 APERTURE LIST*
+%TA.AperFunction,Profile*%
+%ADD10C,0.050000*%
+%TD*%
+G04 APERTURE END LIST*
+D10*
+X43178643Y-29927638D02*
+X62065792Y-29927638D01*
+X62065792Y-84804813D01*
+X43178643Y-84804813D01*
+X43178643Y-29927638D01*
+M02*
