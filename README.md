@@ -57,12 +57,6 @@ The system also uses a mishit identification algorithm. The classification thres
 - J1, J2, J4 and J6 installed manually
 
 ### Software Libraries
-- Adafruit_TinyUSB.h
-- Adafruit_LittleFS.h  
-- InternalFileSystem.h  
-- arduinoFFT.h
-- math.h
-
 > #include <Adafruit_TinyUSB.h>  
 > #include <Adafruit_LittleFS.h>  
 > #include <InternalFileSystem.h>  
@@ -97,8 +91,7 @@ Power On -> Session 1 -> 150 valid impacts -> Cooldown Period -> Session 2 -> ..
 
 ### Mishit Detection
 $Δf_{\text{prev}} = | f_n - f_{n-1} |$  
-$Δf_{\text{next}} = | f_n - f_{n+1} |$  
-An impact was classified as a potential mishit if it satisfied both of the following conditions:  
+$Δf_{\text{next}} = | f_n - f_{n+1} |$    
 $Δf_{\text{prev}} > 50 \text{ Hz}$  
 $|Δf_{\text{next}} - Δf_{\text{prev}}| > 20 \text{ Hz}$
 
@@ -109,11 +102,13 @@ $\Delta f_{\text{prev}}>50\text{ Hz}\quad$
 $\quad \left|{}\Delta f_{\text{next}}-\Delta f_{\text{prev}}\right|{}>20\text{ Hz}$
 
 #### Case 2 (Consecutive Mishit Fix):
-$\Delta f_{\text{prev}}\le 50\text{ Hz}\quad $
-Let $\Delta f_{\text{extended}}=\left|{}f_{n}-f_{n-2}\right|{}$,
+$\Delta f_{\text{prev}}\le 50\text{ Hz}\quad $\\
+Let $\Delta f_{\text{extended}}=\left|{}f_{n}-f_{n-2}\right|{}$,\\
 $\quad \Delta f_{\text{extended}}>50\text{ Hz}\quad \text{and}\quad M(n-1)=1$
 
 $M(n-1)$ is the mishit flag assigned to the preceding impact.
+
+An impact is classified as a potential mishit when either Case 1 or Case 2 is satisfied.
 
 ### Build
 1. Install the Seeed XIAO nRF52840 board package
