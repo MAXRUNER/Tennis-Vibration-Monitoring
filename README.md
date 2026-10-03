@@ -105,15 +105,15 @@ $|Δf_{\text{next}} - Δf_{\text{prev}}| > 20 \text{ Hz}$
 However, one limitation of this metric occurs when two consecutive impacts are both mishits. Therefore:
 
 #### Case 1 (Isolated Mishit):
-\[\Delta f_{\text{prev}}>50\text{ Hz}\quad\]
-\[\quad \left|{}\Delta f_{\text{next}}-\Delta f_{\text{prev}}\right|{}>20\text{ Hz}\]
+$\Delta f_{\text{prev}}>50\text{ Hz}\quad$
+$\quad \left|{}\Delta f_{\text{next}}-\Delta f_{\text{prev}}\right|{}>20\text{ Hz}$
 
 #### Case 2 (Consecutive Mishit Fix):
-\[\Delta f_{\text{prev}}\le 50\text{ Hz}\quad \]
-Let \(\Delta f_{\text{extended}}=\left|{}f_{n}-f_{n-2}\right|{}\),
-\[\quad \Delta f_{\text{extended}}>50\text{ Hz}\quad \text{and}\quad M(n-1)=1\]
+$\Delta f_{\text{prev}}\le 50\text{ Hz}\quad $
+Let $\Delta f_{\text{extended}}=\left|{}f_{n}-f_{n-2}\right|{}$,
+$\quad \Delta f_{\text{extended}}>50\text{ Hz}\quad \text{and}\quad M(n-1)=1$
 
-\(M(n-1)\) is the mishit flag assigned to the preceding impact.
+$M(n-1)$ is the mishit flag assigned to the preceding impact.
 
 ### Build
 1. Install the Seeed XIAO nRF52840 board package
