@@ -16,6 +16,7 @@ const uint32_t COOLDOWN = 10UL * 60 * 60 * 1000;
 const int TRIGGER = 4;
 
 double realData[N], imagData[N];
+
 ArduinoFFT<double> FFT(realData, imagData, N, SAMPLE_RATE);
 
 struct State {
@@ -25,6 +26,9 @@ struct State {
   uint32_t count;
   double previous, pending;
   uint32_t pendingTime;
+  double previousPrevious;  //f(n-2)
+  bool previousWasMishit;   //M(n-1)
+  bool havePreviousPrevious;
 } state;
 
 const uint32_t MAGIC = 0xCAFEBABE; // Unfortunately had to stay professional
@@ -156,6 +160,10 @@ void nextSession() {
 void processHit(double frequency, uint32_t time) {
   // The first impact has no previous impact, so just store it as valid
   if (state.stage == 0) {
+    state.previousPrevious = 0;
+    state.previousWasMishit = false;
+    state.havePreviousPrevious = false;
+
     state.count++;
 
     if (!logHit(frequency, false, time)) {
@@ -195,7 +203,14 @@ void processHit(double frequency, uint32_t time) {
            state.previous); // absolute freq diff from the previous impact
   double deltaNext = fabs(state.pending - frequency);
 
-  bool mishit = deltaPrevious > 50.0 && fabs(deltaNext - deltaPrevious) > 20.0;
+  bool isolatedMishit = deltaPrevious > 50.0 && fabs(deltaNext - deltaPrevious) > 20.0;
+  bool consecutiveMishit =
+    state.havePreviousPrevious &&
+    state.previousWasMishit &&
+    deltaPrevious <= 50.0 &&
+    fabs(state.pending - state.previousPrevious) > 50.0;
+
+bool mishit = isolatedMishit || consecutiveMishit;
 
   // Record the pending impact, whether valid or a mishit
   state.count++;
@@ -220,6 +235,9 @@ void processHit(double frequency, uint32_t time) {
    * The paper's f_[n-1] means the immediately preceding detected impact,
    * not the previous valid impact
    */
+  state.previousPrevious = state.previous;
+  state.havePreviousPrevious = true;
+  state.previousWasMishit = mishit;
   state.previous = state.pending;
 
   /*
