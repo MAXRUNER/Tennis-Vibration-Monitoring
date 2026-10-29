@@ -98,7 +98,7 @@ A retrospective high-frequency outlier filter was applied separately to each ses
 #### 1. Baseline Definition
 The baseline $m_s$ is defined as the mode of the first 150 detected impacts:
 
-$$m_s = \operatorname{mode}(f_{s,1}, \dots, f_{s,150})$$
+$$m_s = \text{mode}(f_{s,1}, \dots, f_{s,150})$$
 
 #### 2. Outlier Flagging
 An impact is flagged if its dominant frequency exceeds this baseline by more than 90 Hz:
