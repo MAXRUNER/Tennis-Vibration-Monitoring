@@ -14,7 +14,7 @@ The system also uses a mishit identification algorithm. The classification thres
 ### Features
 - Piezoelectric impact detection
 - 10 kHz vibration sampling
-- 1024-point FFT
+- 2048-point FFT
 - Hann windowing to reduce spectral leakage
 - Dominant frequency extraction using an FFT
 - Mishit identification and classification
@@ -67,7 +67,7 @@ The system also uses a mishit identification algorithm. The classification thres
 > #include <math.h>
 
 ### Processing Pipeline
-Ball impact -> Piezoelectric Sensor -> ADC Sampling -> 1024 Samples at 10 kHz -> Hann window -> FFT -> Dominant Frequency Extraction -> Mishit Classification -> CSV Logging
+Ball impact -> Piezoelectric Sensor -> ADC Sampling -> 2048 Samples at 10 kHz -> Hann window -> FFT -> Dominant Frequency Extraction -> Mishit Classification -> CSV Logging
 
 ### CSV Schema Documentation
 
@@ -93,26 +93,26 @@ session,count,frequency_hz,mishit_flag,uptime_ms
 Power On -> Session 1 -> 150 valid impacts -> Cooldown Period -> Session 2 -> ... -> Session 7 -> Experiment Complete
 
 ### Mishit Detection
-$Δf_{\text{prev}} = | f_n - f_{n-1} |$  
-$Δf_{\text{next}} = | f_n - f_{n+1} |$    
-$Δf_{\text{prev}} > 50 \text{ Hz}$  
-$|Δf_{\text{next}} - Δf_{\text{prev}}| > 20 \text{ Hz}$
+A retrospective high-frequency outlier filter was applied separately to each session. 
 
-However, one limitation of this metric occurs when two consecutive impacts are both mishits. Therefore:
+#### 1. Baseline Definition
+The baseline $m_s$ is defined as the mode of the first 150 detected impacts:
 
-#### Case 1 (Isolated Mishit)
-$Δf_{\text{prev}} > 50 \text{ Hz}$  
-$|Δf_{\text{next}} - Δf_{\text{prev}}| > 20 \text{ Hz}$
+$$m_s = \operatorname{mode}(f_{s,1}, \dots, f_{s,150})$$
 
-#### Case 2 (Consecutive Mishit Fix)
-$Δf_{\text{prev}} \le 50 \text{ Hz}$  
-$Δf_{\text{extended}} = |f_n - f_{n-2}|$  
-$Δf_{\text{extended}} > 50 \text{ Hz}$  
-$M(n-1) = 1$
+#### 2. Outlier Flagging
+An impact is flagged if its dominant frequency exceeds this baseline by more than 90 Hz:
 
-$M(n-1)$ is the mishit flag assigned to the preceding impact.
+$$
+M_{s,n} = 
+\begin{cases} 
+1, & f_{s,n} > m_s + 90\,\text{Hz} \\ 
+0, & \text{otherwise} 
+\end{cases}
+$$
 
-An impact is classified as a potential mishit when either Case 1 or Case 2 is satisfied.
+(Note: The 90 Hz threshold was selected after inspecting a dataset generated using an old set of Solinco Hyper-G strings at 54$\times$54 lb tension on a Babolat Pure Aero 2019)
+
 
 ### Build
 1. Install the Seeed XIAO nRF52840 board package
