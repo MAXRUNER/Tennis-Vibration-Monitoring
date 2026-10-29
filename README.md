@@ -21,6 +21,9 @@ The system also uses a mishit identification algorithm. The classification thres
 - Flash-based CSV logging
 - Automatic session tracking
 - Persistent state recovery after power loss
+  
+<img width="627" height="807" alt="image" src="https://github.com/user-attachments/assets/99c31995-eb99-4f14-b0e7-e012c2c26113" />
+<img width="480" height="388" alt="image" src="https://github.com/user-attachments/assets/71ee0e71-e531-4ac4-b70a-b9013bb93a94" />
 
 ### Hardware
 - Seeed Studio XIAO nRF52840
