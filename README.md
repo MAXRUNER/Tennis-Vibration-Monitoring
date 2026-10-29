@@ -10,6 +10,8 @@ A Hann window is applied to reduce the spectral leakage caused by discontinuitie
 
 The system also uses a mishit identification algorithm. The classification thresholds were determined empirically through preliminary testing using an older string bed before the main longitudinal experiment. However, there is still the risk of wrongly identifying mishits because the algorithm could make errors in the classification.
 
+A feature that I implemented—not important for the actual device itself—is a 12 second timer before the shots start to record. I gave myself this amount of time to run on to the court and start hitting the shots just in case there were issues with the sensor calibration which caused the readings to drift off.
+
 
 ### Features
 - Piezoelectric impact detection
