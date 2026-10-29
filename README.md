@@ -111,7 +111,7 @@ M_{s,n} =
 \end{cases}
 $$
 
-(Note: The 90 Hz threshold was selected after inspecting a dataset generated using an old set of Solinco Hyper-G strings at 54$\times$54 lb tension on a Babolat Pure Aero 2019)
+(Note: The 90 Hz threshold was selected after inspecting a dataset generated using an old set of Solinco Hyper-G strings at 54 &times; 54 lb tension on a Babolat Pure Aero 2019)
 
 
 ### Build
